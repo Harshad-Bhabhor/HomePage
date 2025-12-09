@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Review</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins';
+            background: linear-gradient(135deg, #e0f7fa, #d1c4e9, #f3e5f5);
+        }
+
+        .header {
+            background-color: #6b07cf;
+            color: white;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 25px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #6b07cf;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        /* STAR RATING */
+        .stars i {
+            font-size: 36px;
+            color: #bbb;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .stars i.active {
+            color: gold;
+        }
+
+        /* TEXTAREA */
+        textarea {
+            width: 100%;
+            height: 160px;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            font-size: 16px;
+            padding: 14px;
+            outline: none;
+            resize: none;
+        }
+
+        /* UPLOAD IMAGE */
+        .upload-box {
+            border: 2px dashed #888;
+            padding: 35px;
+            border-radius: 14px;
+            cursor: pointer;
+            margin-bottom: 14px;
+        }
+
+        .upload-box:hover {
+            border-color: #6b07cf;
+        }
+
+        .preview-img {
+            width: 100%;
+            border-radius: 14px;
+            margin-top: 10px;
+        }
+
+        /* BUTTON */
+        button {
+            width: 100%;
+            background: #6b07cf;
+            color: white;
+            padding: 15px;
+            border-radius: 14px;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 18px;
+        }
+
+        button:hover {
+            background: #5906b0;
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        .upload-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 120px;
+            border: 2px dashed #8f44fd;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 18px;
+            color: #8f44fd;
+            text-align: center;
+            padding: 10px;
+            transition: 0.3s ease;
+        }
+
+        /* Hover effect */
+        .upload-box:hover {
+            background-color: #f5e8ff;
+            border-color: #6a28d9;
+            color: #6a28d9;
+        }
+
+        @media(max-width: 480px) {
+            .upload-box {
+                width: 100%;
+                font-size: 16px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <span id="shopName">Review</span>
+        <span class="back" onclick="history.back()" style="cursor:pointer;font-size:18px;">Back</span>
+    </div>
+
+    <div class="container">
+
+        <div class="section-title">Rate your experience</div>
+        <div class="stars" id="starRating">
+            <i class="fa-solid fa-star" data-value="1"></i>
+            <i class="fa-solid fa-star" data-value="2"></i>
+            <i class="fa-solid fa-star" data-value="3"></i>
+            <i class="fa-solid fa-star" data-value="4"></i>
+            <i class="fa-solid fa-star" data-value="5"></i>
+        </div>
+
+        <br>
+        <div class="section-title">Upload Food or Shop Photo</div>
+        <label class="upload-box">
+            <input type="file" id="imageUpload" accept="image/*" hidden>
+            Click to upload photo
+        </label>
+        <img id="previewImage" class="preview-img" style="display:none;">
+
+        <br>
+        <div class="section-title">Write Review</div>
+        <textarea id="reviewText"
+            placeholder="Share your experience about food quality, service, pricing..."></textarea>
+
+        <button onclick="submitReview()">Submit Review</button>
+
+        <hr style="margin: 30px 0; border: 1px solid #ddd;">
+
+        <h2 class="section-title" style="text-align:left;">Customer Reviews</h2>
+        <div id="reviewsList"></div>
+
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const shopName = urlParams.get("shop");
+        document.getElementById("shopName").innerText = shopName;
+
+        let selectedRating = 0;
+        const stars = document.querySelectorAll("#starRating i");
+
+        stars.forEach(star => {
+            star.addEventListener("click", function () {
+                selectedRating = parseInt(this.getAttribute("data-value"));
+                updateStars(selectedRating);
+            });
+        });
+
+        function updateStars(rating) {
+            stars.forEach(star => {
+                star.classList.remove("active");
+                if (parseInt(star.getAttribute("data-value")) <= rating) {
+                    star.classList.add("active");
+                }
+            });
+        }
+
+        // Image preview
+        const imageInput = document.getElementById("imageUpload");
+        const previewImage = document.getElementById("previewImage");
+        document.querySelector(".upload-box").addEventListener("click", () => imageInput.click());
+
+        imageInput.addEventListener("change", e => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                previewImage.src = reader.result;
+                previewImage.style.display = "block";
+            };
+            reader.readAsDataURL(imageInput.files[0]);
+        });
+
+        function submitReview() {
+            const reviewText = document.getElementById("reviewText").value.trim();
+            if (selectedRating === 0) return alert("Select rating");
+            if (reviewText === "") return alert("Write something");
+
+            const imageData = previewImage.src || "";
+
+            // load existing reviews
+            let reviews = JSON.parse(localStorage.getItem("reviews_" + shopName)) || [];
+
+            // unique ID
+            const newId = Date.now();
+
+            const newReview = {
+                id: newId,
+                shop: shopName,
+                stars: selectedRating,
+                text: reviewText,
+                image: imageData
+            };
+
+            reviews.push(newReview);
+            localStorage.setItem("reviews_" + shopName, JSON.stringify(reviews));
+
+            clearInputs();
+            loadReviews();
+        }
+
+        function loadReviews() {
+            let reviews = JSON.parse(localStorage.getItem("reviews_" + shopName)) || [];
+
+            const container = document.getElementById("reviewsList");
+            container.innerHTML = "";
+
+            reviews.forEach(review => {
+                container.innerHTML += `
+                <div style="background:#fff;padding:20px;border-radius:15px;margin-bottom:15px;text-align:left;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                    <p style="font-size:22px;color:#ffb400;">${"★".repeat(review.stars)}</p>
+                    ${review.image ? `<img src="${review.image}" style="width:100%;border-radius:14px;margin-bottom:10px;">` : ""}
+                    <p style="font-size:16px;">${review.text}</p>
+                    <button onclick="editReview(${review.id})" style="margin-top:10px;background:#0197f6;">Edit</button>
+                    <button onclick="deleteReview(${review.id})" style="margin-top:10px;background:#ff4444;">Delete</button>
+                </div>
+            `;
+            });
+        }
+
+        function deleteReview(id) {
+            let reviews = JSON.parse(localStorage.getItem("reviews_" + shopName)) || [];
+            reviews = reviews.filter(r => r.id !== id);
+            localStorage.setItem("reviews_" + shopName, JSON.stringify(reviews));
+            loadReviews();
+        }
+
+        function editReview(id) {
+            let reviews = JSON.parse(localStorage.getItem("reviews_" + shopName)) || [];
+            const review = reviews.find(r => r.id === id);
+            const newText = prompt("Edit your review:", review.text);
+            if (!newText) return;
+
+            review.text = newText;
+            localStorage.setItem("reviews_" + shopName, JSON.stringify(reviews));
+            loadReviews();
+        }
+
+        function clearInputs() {
+            document.getElementById("reviewText").value = "";
+            previewImage.src = "";
+            previewImage.style.display = "none";
+            updateStars(0);
+            selectedRating = 0;
+        }
+
+        loadReviews();
+    </script>
+
+
+
+</body>
+
+</html>

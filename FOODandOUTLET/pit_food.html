@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+    <title>PIT-court</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins';
+            text-align: center;
+        }
+
+        .header {
+            background-color: #6b07cf;
+            padding: 5px;
+            color: white;
+            font-size: 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+            height: auto;
+            background: linear-gradient(135deg, #e0f7fa, #d1c4e9, #f3e5f5);
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            background: #6b07cf;
+            color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            height: 278px;
+            box-shadow: 0 4px 12px rgba(105, 105, 104, 0.885);
+            transition: 0.5s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.8);
+        }
+
+        .outlet-image img {
+            width: 100%;
+            height: 225px;
+            object-fit: cover;
+        }
+
+        .outlet-title {
+            background-color: #6b07cf;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .button {
+            border: 6px solid white;
+            border-radius: 50%;
+            width: 65px;
+            height: 65px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .fa-circle-user {
+            font-size: 50px;
+        }
+
+        /* REVIEW SECTION */
+        .review-section {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            z-index: 9999;
+            padding: 20px;
+            box-shadow: -3px 0 10px rgba(0, 0, 0, 0.4);
+            transition: 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .review-header {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #6b07cf;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-review {
+            font-size: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 140px;
+            border-radius: 10px;
+            border: 1px solid #aaa;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 15px;
+            resize: none;
+        }
+
+        .submit-btn {
+            background: #6b07cf;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            border: none;
+        }
+
+        /* SIDEBAR */
+        .profile-sidebar {
+            position: fixed;
+            right: -390px;
+            top: 0;
+            width: 390px;
+            height: 100vh;
+            background: linear-gradient(180deg, #5a00d3, #ad8bff);
+            padding: 25px;
+            color: white;
+            overflow-y: auto;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.25);
+            transition: right 0.4s ease;
+            z-index: 999;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            font-size: 28px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            padding: 16px 20px;
+            border-radius: 18px;
+            color: #222;
+            margin-bottom: 25px;
+        }
+
+        .profile-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .profile-left img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        .menu-section {
+            background: #fff;
+            border-radius: 18px;
+            padding: 10px 0;
+            color: #222;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: rgba(90, 0, 211, 0.12);
+        }
+
+        .divider {
+            height: 1px;
+            background: #ccc;
+            width: 90%;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div><img src="Assests/logo_img.png" height="110px" onclick="history.back()"></div>
+        <div><img src="Assests/Food.png" height="80px"></div>
+        <div><button class="button" id="openSidebar"><i class="fa-solid fa-circle-user"></i></button></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <div class="box" onclick="openReview('PIT Outlet 1')">
+            <div class="outlet-image"><img src="Assests/Greenzy_Outlet_08.jpg"></div>
+            <div class="outlet-title">Outlet 1</div>
+        </div>
+        <div class="box" onclick="openReview('PIT Outlet 2')">
+            <div class="outlet-image"><img src="Assests/Greenzy_Outlet_08.jpg"></div>
+            <div class="outlet-title">Outlet 2</div>
+        </div>
+        <div class="box" onclick="openReview('PIT Outlet 3')">
+            <div class="outlet-image"><img src="Assests/Greenzy_Outlet_08.jpg"></div>
+            <div class="outlet-title">Outlet 3</div>
+        </div>
+        <div class="box" onclick="openReview('PIT Outlet 4')">
+            <div class="outlet-image"><img src="Assests/Greenzy_Outlet_08.jpg"></div>
+            <div class="outlet-title">Outlet 4</div>
+        </div>
+        <div class="box" onclick="openReview('PIT Outlet 5')">
+            <div class="outlet-image"><img src="Assests/Greenzy_Outlet_08.jpg"></div>
+            <div class="outlet-title">Outlet 5</div>
+        </div>
+        <div class="box" onclick="openReview('PIT Outlet 6')">
+            <div class="outlet-image"><img src="Assests/Greenzy_Outlet_08.jpg"></div>
+            <div class="outlet-title">Outlet 6</div>
+        </div>
+        <div class="box" onclick="openReview('PIT Outlet 7')">
+            <div class="outlet-image"><img src="Assests/Greenzy_Outlet_08.jpg"></div>
+            <div class="outlet-title">Outlet 7</div>
+        </div>
+        <div class="box" onclick="openReview('PIT Outlet 8')">
+            <div class="outlet-image"><img src="Assests/Greenzy_Outlet_08.jpg"></div>
+            <div class="outlet-title">Outlet 8</div>
+        </div>
+    </div>
+
+    <!-- REVIEW PANEL --><!-- PROFILE SIDEBAR -->
+    <div class="profile-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Profile</h2>
+            <span class="close-btn" id="closeSidebar">&times;</span>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-left">
+                <img src="Assests/avatar.png" alt="avatar">
+                <div class="profile-info">
+                    <h3>Narendra Modi</h3>
+                    <p>@narendramodi</p>
+                    <div class="enroll">Enrollment No:250305105XXX</div>
+                </div>
+            </div>
+
+            <a href="edit_profile.html" class="edit-btn">
+                <img src="Assests/edit-text.png" width="26">
+            </a>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-item"><img src="Assests/user.png" width="20"> My Account</div>
+            <div class="divider"></div>
+            <div class="menu-item"><img src="Assests/diskette.png" width="20"> Saved Beneficiary</div>
+            <div class="divider"></div>
+            <div class="menu-item"><img src="Assests/exit.png" width="20"> Log out</div>
+        </div>
+
+        <div class="section-title">More</div>
+
+        <div class="menu-section">
+            <div class="menu-item"><img src="Assests/help.png" width="20"> Help & Support</div>
+            <div class="divider"></div>
+            <div class="menu-item"><img src="Assests/info.png" width="20"> About App</div>
+        </div>
+    </div>
+
+    <script>
+
+        const courtName = "Greenzy";
+
+        function openReview(shopName) {
+            window.location.href = `review_PIT.html?shop=${encodeURIComponent(shopName)}`;
+        }
+
+
+        const sidebar = document.getElementById("sidebar");
+        document.getElementById("openSidebar").addEventListener("click", () => {
+            sidebar.style.right = "0";
+        });
+
+        document.getElementById("closeSidebar").addEventListener("click", () => {
+            sidebar.style.right = "-390px";
+        });
+
+    </script>
+
+</body>
+
+</html>
